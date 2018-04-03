@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en"  style="background-color:white">
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="js/lib/phaser.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-3.1.0.min.js"></script>
+	<script src="js/codemirror/rapydscript.js"></script>
+	<link rel="stylesheet" href="js/codemirror/codemirror.css">
+	<script src="js/codemirror/codemirror.js"></script>
+	<script src="js/codemirror/matchbrackets.js"></script>
+	<link rel="stylesheet" href="js/codemirror/show-hint.css">
+	<script src="js/codemirror/show-hint.js"></script>
+	<script src="js/codemirror/python-hint.js"></script>
+	<script src="js/codemirror/python.js"></script>
+
+
+	
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+			list-style: none;
+		}
+		body,html{
+			width:100%;
+			height:100%;
+		}
+		.tipsBox{
+			width:500px;
+			height:300px;
+			background-color: #fccb3c;
+			line-height: 300px;
+			text-align: center;
+			-webkit-border-radius:6px;
+			-moz-border-radius:6px;
+			border-radius:6px;
+			position: absolute;
+			left:0;
+			right:0;
+			margin: auto;
+			top:150px;
+			color: #fff;
+			display: none;
+			z-index: 2;
+		}
+		.okBtn{
+			width:100px;
+			height: 100px;
+			background-color: #77ee77;
+			border:2px solid #0088ff;
+			-webkit-border-radius:50%;
+			-moz-border-radius:50%;
+			border-radius:50%;
+			position: absolute;
+			right:20px;
+			bottom: 20px;
+			color: #fff;
+			line-height: 100px;
+		}
+		.tips_Obj{
+			width:150px;
+			height: 150px;
+			background-color: #77ee77;
+			position: absolute;
+			left:0;
+			bottom:0;
+		}
+		.actionWrap{
+			width:100%;
+			height:50px;
+			background-color: #f7f7f7;
+			position: absolute;
+			bottom:0;
+		}
+		.actions{
+			width:100px;
+			height:50px;
+			background-color: #999977;
+			float: left;
+			-webkit-border-radius:5px;
+			-moz-border-radius:5px;
+			border-radius:5px;
+			margin-right: 5px;
+			text-align: center;
+			line-height: 50px;
+		}
+		.actions:hover{
+			cursor: pointer;
+			color: #fff;
+		}
+		.controlBtn{
+			width:120px;
+			height:60px;
+			position: absolute;
+			bottom: 150px;
+			text-align: center;
+			line-height: 60px;
+			-webkit-border-radius:5px;
+			-moz-border-radius:5px;
+			border-radius:5px;
+			cursor: pointer;
+		}
+		.run{
+			background-image: url("modeIng/start.png");
+			background-size: 100% auto;
+			background-repeat: no-repeat;
+			background-position: center center;
+			color: #FFF;
+			right:322px;
+		}
+		.again{
+			color: #999977;
+			right:140px;
+			background-image: url("modeIng/restart.png");
+			background-size: 100% auto;
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+		.gameSet{
+			width:62px;
+			color: #000000;
+			right:20px;
+			background-image: url("modeIng/set.png");
+			background-size: auto 100%;
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	</style>
+</head>
+
+<body style="overflow:-Scroll;overflow-y:hidden;overflow-x:hidden;height: 100%;">
+	<div class="tipsBox">
+		%%$%$$^%!~@!#~!#^*&(*)_(^&*^%
+		<div class="okBtn">OK</div>
+	</div>
+	<div id="stage" class="active_Area" style="width: 600px;height: 100%;float: left;background-color: #cccccc;position: relative;">
+		<div class="tips_Obj"></div>
+	</div>
+	<div id="control_tab_items" style="position: absolute;left: 600px;top: 0;height: 100%">
+		<div>
+			<textarea id="code" name="code"></textarea>
+		</div>
+		<div class="run controlBtn"></div>
+		<div class="again controlBtn"></div>
+		<div class="gameSet controlBtn"></div>
+		<ul class="actionWrap">
+			<li class="actions">
+				<p>step()</p>
+			</li>
+			<li class="actions">
+				<p>turnLeft()</p>
+			</li>
+			<li class="actions">
+				<p>turnRight()</p>
+			</li>
+		</ul>
+	</div>
+
+	<script>
+		$('#control_tab_items').css('width',$(window).width()-600+'px');
+		$('.tips_Obj').click(function () {
+			$('.tipsBox').slideDown();
+        });
+        $('.okBtn').click(function () {
+            $('.tipsBox').slideUp();
+        });
+	</script>
+	<script>
+	var dummy = {
+        attrs: {
+          color: ["red", "green", "blue", "purple", "white", "black", "yellow"],
+          size: ["large", "medium", "small"],
+          description: null
+        },
+        children: []
+      };
+	var tags = {
+        "!top": ["top"],
+        "!attrs": {
+          id: null,
+          class: ["A", "B", "C"]
+        },
+        top: {
+          attrs: {
+            lang: ["en", "de", "fr", "nl"],
+            freeform: null
+          },
+          children: ["animal", "plant"]
+        },
+        animal: {
+          attrs: {
+            name: null,
+            isduck: ["yes", "no"]
+          },
+          children: ["wings", "feet", "body", "head", "tail"]
+        },
+        plant: {
+          attrs: {name: null},
+          children: ["leaves", "stem", "flowers"]
+        },
+        wings: dummy, feet: dummy, body: dummy, head: dummy, tail: dummy,
+        leaves: dummy, stem: dummy, flowers: dummy
+      };
+	function completeAfter(cm, pred) {
+        var cur = cm.getCursor();
+        if (!pred || pred()) setTimeout(function() {
+          if (!cm.state.completionActive)
+            CodeMirror.showHint(cm, CodeMirror.hint.xml, {schemaInfo: tags, completeSingle: false});
+        }, 100);
+        return CodeMirror.Pass;
+      }
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+      		mode: {
+      			name: "python",
+      			version: 3,
+      			singleLineStringErrors: false
+      		},
+      		styleActiveLine: true,
+      		lineNumbers: true,
+      		lineWrapping: true,
+      		extraKeys: {
+      			"'c'": completeAfter,
+      			"/": "autocomplete"
+      		},
+      		indentUnit: 2,
+      		matchBrackets: true
+      	});
+	
+
+    </script>
+
+	
+<script>
+	var output_options = {
+		indent_start: 0,
+		indent_level: 4,
+		quote_keys: false,
+		space_colon: true,
+		ascii_only: false,
+		inline_script: false,
+		width: 80,
+		max_line_len: 32e3,
+		es6: false,
+		beautify: true,
+		source_map: null,
+		bracketize: false,
+		semicolons: true,
+		comments: false,
+		preserve_line: false,
+		omit_baselib: true,
+		baselib: null,
+		private_scope: false,
+		auto_bind: false,
+		write_name: false
+	};
+	var pythonnum = 0;
+</script>
+
+<script type="text/javascript" src="js/phaserall.js"></script>
+<script type="text/javascript" src="js/actor.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+</body>
+
+</html>
