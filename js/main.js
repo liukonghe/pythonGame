@@ -1,10 +1,10 @@
 //var game = new Phaser.Game(gameSet);
 var actorList = [{
 		name: "monkey",
-		x: 300,
-		y: 300,
+		x: 340,
+		y: 340,
 		imageurl: "assets/monkey.png"
-	}, {
+	},/*  {
 		name: "dude",
 		sheet: true,
 		x: 320,
@@ -13,13 +13,13 @@ var actorList = [{
 		imageurl: "assets/dude.png",
 		width: 32,
 		height: 48
-	}, {
+	}, */ {
 		name: "peach1",
 		group: true,
 		imageurl: "assets/peach1.png",
-		x: 200,
-		y: 200,
-		left: 100,
+		x: 190,
+		y: 190,
+		left: 110,
 		top: 100
 	}
 ];
